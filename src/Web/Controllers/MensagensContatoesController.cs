@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
+using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {

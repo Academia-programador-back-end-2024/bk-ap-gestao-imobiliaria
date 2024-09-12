@@ -1,15 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
 {
     public class ClientesController : Controller
     {
-        private readonly ImobiliariaDbContext _context;
+        //private readonly ImobiliariaDbContext _context;
+        private readonly IServiceCliente _serviceCliente;
 
-        public ClientesController(ImobiliariaDbContext context)
+        public ClientesController(
+            //ImobiliariaDbContext context,
+            IServiceCliente serviceCliente)
         {
-            _context = context;
+            //_context = context;
+            _serviceCliente = serviceCliente;
+            //IOC
+            //_serviceCliente = new ServiceCliente(new ClienteRepositorio(context));
         }
 
         // GET: Clientes
@@ -47,13 +55,28 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClienteId,Nome,Cpf,Telefone,Email")] Cliente cliente)
+        public async Task<IActionResult> Create(CreateClienteViewModel cliente)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cliente);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    //Mapeamento
+                    var clienteVo = new Cliente
+                    {
+                        Cpf = cliente.Cpf,
+                        Email = cliente.Email,
+                        Nome = cliente.Nome,
+                        Telefone = cliente.Telefone
+                    };
+
+                    _serviceCliente.CriarCliente(clienteVo);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Erro na criação : {ex.Message}");
+                }
             }
             return View(cliente);
         }
