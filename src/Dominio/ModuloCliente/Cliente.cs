@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 
-namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web;
+namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 
 public partial class Cliente
 {

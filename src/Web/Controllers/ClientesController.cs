@@ -1,29 +1,24 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
 {
     public class ClientesController : Controller
     {
-        //private readonly ImobiliariaDbContext _context;
         private readonly IServiceCliente _serviceCliente;
 
-        public ClientesController(
-            //ImobiliariaDbContext context,
-            IServiceCliente serviceCliente)
+        public ClientesController(IServiceCliente serviceCliente)
         {
-            //_context = context;
             _serviceCliente = serviceCliente;
-            //IOC
-            //_serviceCliente = new ServiceCliente(new ClienteRepositorio(context));
         }
 
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Clientes.ToListAsync());
+            var clientesVo = _serviceCliente.TragaTodosClientes();
+
+            return View(clientesVo.ToClientesViewModel());
         }
 
         // GET: Clientes/Details/5
@@ -34,14 +29,13 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(m => m.ClienteId == id);
+            var cliente = _serviceCliente.TragaClientePorId(id.Value);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);
+            return View(cliente.ToClienteViewModel());
         }
 
         // GET: Clientes/Create
@@ -61,16 +55,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
             {
                 try
                 {
-                    //Mapeamento
-                    var clienteVo = new Cliente
-                    {
-                        Cpf = cliente.Cpf,
-                        Email = cliente.Email,
-                        Nome = cliente.Nome,
-                        Telefone = cliente.Telefone
-                    };
-
-                    _serviceCliente.CriarCliente(clienteVo);
+                    _serviceCliente.CriarCliente(cliente.ToClienteVo());
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -89,12 +74,14 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes.FindAsync(id);
+            var clientesVo = _serviceCliente.TragaTodosClientes();
+            var cliente = clientesVo.FirstOrDefault(m => m.ClienteId == id);
             if (cliente == null)
             {
                 return NotFound();
             }
-            return View(cliente);
+
+            return View(cliente.ToClienteViewModel());
         }
 
         // POST: Clientes/Edit/5
@@ -102,7 +89,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClienteId,Nome,Cpf,Telefone,Email")] Cliente cliente)
+        public async Task<IActionResult> Edit(int id, ClienteViewModel cliente)
         {
             if (id != cliente.ClienteId)
             {
@@ -113,21 +100,13 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
             {
                 try
                 {
-                    _context.Update(cliente);
-                    await _context.SaveChangesAsync();
+                    _serviceCliente.SalvarCliente(cliente.ToClienteVo());
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!ClienteExists(cliente.ClienteId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", $"Erro no editar : {ex.Message}");
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(cliente);
         }
@@ -140,14 +119,13 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(m => m.ClienteId == id);
+            var cliente = _serviceCliente.TragaClientePorId(id.Value);
             if (cliente == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);
+            return View(cliente.ToClienteViewModel());
         }
 
         // POST: Clientes/Delete/5
@@ -155,19 +133,18 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente != null)
+            try
             {
-                _context.Clientes.Remove(cliente);
+                _serviceCliente.Remover(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Erro no deletar : {ex.Message}");
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(_serviceCliente.TragaClientePorId(id).ToClienteViewModel());
         }
 
-        private bool ClienteExists(int id)
-        {
-            return _context.Clientes.Any(e => e.ClienteId == id);
-        }
     }
 }
