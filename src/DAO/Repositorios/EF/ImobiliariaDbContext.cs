@@ -1,8 +1,6 @@
-﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Configurations;
-using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 
@@ -11,27 +9,6 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 
 public partial class ImobiliariaDbContext : DbContext
 {
-    private string ConnectionString { get; set; }
-    private string GoogleToken { get; set; }
-    public ImobiliariaDbContext(IOptions<ConnectionStrings> options)
-    {
-        ConnectionStrings conexoes = options.Value;
-
-        ConnectionString = conexoes.Master;
-    }
-
-    public ImobiliariaDbContext(
-        IOptions<ConnectionStrings> optionsObject,
-        IOptions<Tokens> tokensObject,
-        DbContextOptions<ImobiliariaDbContext> options)
-        : base(options)
-    {
-        ConnectionStrings conexoes = optionsObject.Value;
-        GoogleToken = tokensObject.Value.GoogleApi;
-
-        ConnectionString = conexoes.Master;
-    }
-
     public virtual DbSet<Cliente> Clientes { get; set; }
 
     public virtual DbSet<Corretore> Corretores { get; set; }
@@ -42,9 +19,8 @@ public partial class ImobiliariaDbContext : DbContext
 
     public virtual DbSet<MensagensContato> MensagensContatos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public ImobiliariaDbContext(DbContextOptions<ImobiliariaDbContext> options) : base(options)
     {
-        optionsBuilder.UseSqlServer(ConnectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
