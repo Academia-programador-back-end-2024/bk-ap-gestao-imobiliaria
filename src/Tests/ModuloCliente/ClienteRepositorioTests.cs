@@ -49,7 +49,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Tests.ModuloCliente
             // Assert
             var clienteNoDb = _context.Clientes.FirstOrDefault(c => c.ClienteId == 3);
             Assert.NotNull(clienteNoDb);
-            Assert.Equal("Cliente 3", clienteNoDb.Nome);
+            Assert.Equivalent(novoCliente, clienteNoDb);
         }
 
         [Fact]

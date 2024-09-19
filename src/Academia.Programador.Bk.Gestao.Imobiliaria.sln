@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Docs", "5 - Docs", "{84
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataBase", "DataBase", "{B500A51D-CD2A-4239-AA21-A95F7F420BD3}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\docs\DataBase\script_inicial.sql = ..\..\docs\DataBase\script_inicial.sql
+		..\docs\DataBase\script_inicial.sql = ..\docs\DataBase\script_inicial.sql
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Academia.Programador.Bk.Gestao.Imobiliaria.Web", "Web\Academia.Programador.Bk.Gestao.Imobiliaria.Web.csproj", "{BE94B7E5-E3CD-4CE8-A0D9-A9E7BD25617E}"

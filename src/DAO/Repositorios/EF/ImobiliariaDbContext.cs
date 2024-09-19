@@ -1,4 +1,5 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Cliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Corretor;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 using Microsoft.EntityFrameworkCore;
@@ -27,26 +28,12 @@ public partial class ImobiliariaDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ClienteEntityConfiguration clienteEntityConfiguration = new();
+        CorretorEntityConfiguration corretorEntityConfiguration = new();
+
+
         modelBuilder.ApplyConfiguration(clienteEntityConfiguration);
+        modelBuilder.ApplyConfiguration(corretorEntityConfiguration);
 
-        modelBuilder.Entity<Corretore>(entity =>
-        {
-            entity.HasKey(e => e.CorretorId).HasName("PK__Corretor__4878C58FFBA660A3");
-
-            entity.HasIndex(e => e.Cpf, "UQ__Corretor__C1F89731960F9C31").IsUnique();
-
-            entity.HasIndex(e => e.Creci, "UQ__Corretor__C46674094787D8EB").IsUnique();
-
-            entity.Property(e => e.Cpf)
-                .HasMaxLength(11)
-                .HasColumnName("CPF");
-            entity.Property(e => e.Creci)
-                .HasMaxLength(20)
-                .HasColumnName("CRECI");
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.Nome).HasMaxLength(100);
-            entity.Property(e => e.Telefone).HasMaxLength(20);
-        });
 
         modelBuilder.Entity<Favorito>(entity =>
         {
