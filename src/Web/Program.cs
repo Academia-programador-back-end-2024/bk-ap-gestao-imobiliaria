@@ -1,6 +1,8 @@
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Configurations;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
 {
@@ -14,9 +16,14 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            //IOC
-            //Injeção de dependencia
-            builder.Services.AddTransient<ImobiliariaDbContext>();
+
+            // Adicionando o contexto e configurando para usar o SQL Server
+            builder.Services.AddDbContext<ImobiliariaDbContext>((serviceProvider, options) =>
+            {
+                var connectionStrings = serviceProvider.GetRequiredService<IOptions<ConnectionStrings>>().Value;
+                options.UseSqlServer(connectionStrings.Master);
+            });
+
             builder.Services.AddTransient<IServiceCliente, ServiceCliente>();
             builder.Services.AddTransient<IClienteRepositorio, ClienteRepositorio>();
 
@@ -30,8 +37,12 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
             var app = builder.Build();
 
 
-            var db = app.Services.GetService<ImobiliariaDbContext>();
-            db.Seed();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var db = services.GetRequiredService<ImobiliariaDbContext>();
+                db.Seed();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

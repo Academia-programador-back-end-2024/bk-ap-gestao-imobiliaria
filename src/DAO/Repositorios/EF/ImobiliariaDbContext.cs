@@ -1,8 +1,8 @@
-﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Configurations;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Cliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Corretor;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 
@@ -11,27 +11,6 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 
 public partial class ImobiliariaDbContext : DbContext
 {
-    private string ConnectionString { get; set; }
-    private string GoogleToken { get; set; }
-    public ImobiliariaDbContext(IOptions<ConnectionStrings> options)
-    {
-        ConnectionStrings conexoes = options.Value;
-
-        ConnectionString = conexoes.Master;
-    }
-
-    public ImobiliariaDbContext(
-        IOptions<ConnectionStrings> optionsObject,
-        IOptions<Tokens> tokensObject,
-        DbContextOptions<ImobiliariaDbContext> options)
-        : base(options)
-    {
-        ConnectionStrings conexoes = optionsObject.Value;
-        GoogleToken = tokensObject.Value.GoogleApi;
-
-        ConnectionString = conexoes.Master;
-    }
-
     public virtual DbSet<Cliente> Clientes { get; set; }
 
     public virtual DbSet<Corretore> Corretores { get; set; }
@@ -42,45 +21,19 @@ public partial class ImobiliariaDbContext : DbContext
 
     public virtual DbSet<MensagensContato> MensagensContatos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public ImobiliariaDbContext(DbContextOptions<ImobiliariaDbContext> options) : base(options)
     {
-        optionsBuilder.UseSqlServer(ConnectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Cliente>(entity =>
-        {
-            entity.HasKey(e => e.ClienteId).HasName("PK__Clientes__71ABD0871A158499");
+        ClienteEntityConfiguration clienteEntityConfiguration = new();
+        CorretorEntityConfiguration corretorEntityConfiguration = new();
 
-            entity.HasIndex(e => e.Cpf, "UQ__Clientes__C1F897319F8FF376").IsUnique();
 
-            entity.Property(e => e.Cpf)
-                .HasMaxLength(11)
-                .HasColumnName("CPF");
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.Nome).HasMaxLength(100);
-            entity.Property(e => e.Telefone).HasMaxLength(20);
-        });
+        modelBuilder.ApplyConfiguration(clienteEntityConfiguration);
+        modelBuilder.ApplyConfiguration(corretorEntityConfiguration);
 
-        modelBuilder.Entity<Corretore>(entity =>
-        {
-            entity.HasKey(e => e.CorretorId).HasName("PK__Corretor__4878C58FFBA660A3");
-
-            entity.HasIndex(e => e.Cpf, "UQ__Corretor__C1F89731960F9C31").IsUnique();
-
-            entity.HasIndex(e => e.Creci, "UQ__Corretor__C46674094787D8EB").IsUnique();
-
-            entity.Property(e => e.Cpf)
-                .HasMaxLength(11)
-                .HasColumnName("CPF");
-            entity.Property(e => e.Creci)
-                .HasMaxLength(20)
-                .HasColumnName("CRECI");
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.Nome).HasMaxLength(100);
-            entity.Property(e => e.Telefone).HasMaxLength(20);
-        });
 
         modelBuilder.Entity<Favorito>(entity =>
         {
