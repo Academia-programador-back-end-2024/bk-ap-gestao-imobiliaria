@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
