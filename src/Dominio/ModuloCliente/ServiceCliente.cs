@@ -1,16 +1,21 @@
-﻿namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 
 public class ServiceCliente : IServiceCliente
 {
     private readonly IClienteRepositorio _clienteRepositorio;
+    private readonly ILogger<ServiceCliente> _logger;
 
-    public ServiceCliente(IClienteRepositorio clienteRepositorio)
+    public ServiceCliente(IClienteRepositorio clienteRepositorio, ILogger<ServiceCliente> logger)
     {
         _clienteRepositorio = clienteRepositorio;
+        _logger = logger;
     }
 
     public void CriarCliente(Cliente cliente)
     {
+        _logger.LogInformation("Criando um cliente");
         //Validar duplicidade
         ValidacaoDuplicacao(cliente);
 
@@ -23,6 +28,7 @@ public class ServiceCliente : IServiceCliente
 
         if (exiteClienteCpf is true)
         {
+            _logger.LogWarning("Tentativa de duplicar cpf");
             throw new ClienteExistenteException();
         }
 

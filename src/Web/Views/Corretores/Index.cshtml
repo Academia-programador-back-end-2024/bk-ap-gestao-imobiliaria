@@ -1,13 +1,13 @@
-﻿@model IEnumerable<Academia.Programador.Bk.Gestao.Imobiliaria.Web.Corretore>
+﻿@model IEnumerable<CorretorViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Corretores</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Criar um novo</a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CorretorId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CorretorId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CorretorId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.CorretorId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.CorretorId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.CorretorId">Remover</a>
             </td>
         </tr>
 }
