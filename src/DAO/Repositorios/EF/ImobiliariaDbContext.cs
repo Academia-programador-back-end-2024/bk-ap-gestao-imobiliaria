@@ -1,7 +1,9 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Cliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Corretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Imovel;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,10 +32,12 @@ public partial class ImobiliariaDbContext : DbContext
     {
         ClienteEntityConfiguration clienteEntityConfiguration = new();
         CorretorEntityConfiguration corretorEntityConfiguration = new();
+        ImovelEntityConfiguration imovelEntityConfiguration = new();
 
 
         modelBuilder.ApplyConfiguration(clienteEntityConfiguration);
         modelBuilder.ApplyConfiguration(corretorEntityConfiguration);
+        modelBuilder.ApplyConfiguration(imovelEntityConfiguration);
 
 
         modelBuilder.Entity<Favorito>(entity =>
@@ -49,34 +53,6 @@ public partial class ImobiliariaDbContext : DbContext
                 .HasForeignKey(d => d.ImovelId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Favoritos__Imove__46E78A0C");
-        });
-
-        modelBuilder.Entity<Imovel>(entity =>
-        {
-            entity.ToTable("Imoveis");
-
-            entity.HasKey(e => e.ImovelId).HasName("PK__Imoveis__68DA341CB2529FCE");
-
-            entity.Property(e => e.Area).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.Disponivel).HasDefaultValue(true);
-            entity.Property(e => e.Endereco).HasMaxLength(255);
-            entity.Property(e => e.Negocio).HasDefaultValue(1);
-            entity.Property(e => e.Tipo).HasDefaultValue(1);
-            entity.Property(e => e.Valor).HasColumnType("decimal(18, 2)");
-
-            entity.HasOne(d => d.ClienteDono).WithMany(p => p.Imoveis)
-                .HasForeignKey(d => d.ClienteDonoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Imoveis__Cliente__4316F928");
-
-            entity.HasOne(d => d.CorretorGestor).WithMany(p => p.ImoveiCorretorGestors)
-                .HasForeignKey(d => d.CorretorGestorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Imoveis__Correto__412EB0B6");
-
-            entity.HasOne(d => d.CorretorNegocio).WithMany(p => p.ImoveiCorretorNegocios)
-                .HasForeignKey(d => d.CorretorNegocioId)
-                .HasConstraintName("FK__Imoveis__Correto__4222D4EF");
         });
 
         modelBuilder.Entity<MensagensContato>(entity =>
@@ -113,6 +89,39 @@ public partial class ImobiliariaDbContext : DbContext
     public void Seed()
     {
         Database.EnsureCreated();
+
+        if (Corretores.Count() == 0)
+        {
+            Corretor corretor = new()
+            {
+                Cpf = "12345678915",
+                Creci = "123",
+                Email = "john@devolta.com",
+                Nome = "John 4",
+                Telefone = "666 99996669"
+            };
+            Corretores.Add(corretor);
+            SaveChanges();
+        }
+
+        if (Imoveis.Count() == 0)
+        {
+            Imovel imovel = new Imovel()
+            {
+                Area = 50,
+                ClienteDonoId = Clientes.First().ClienteId,
+                CorretorGestorId = Corretores.First().CorretorId,
+                Descricao = "descricao",
+                Endereco = "na nuvem de poeira",
+                Disponivel = true,
+                Fotos = "A estudas lista json",
+                Negocio = 1,
+                Tipo = 1,
+                Valor = 2300000
+            };
+            this.Imoveis.Add(imovel);
+            SaveChanges();
+        }
 
     }
 }
