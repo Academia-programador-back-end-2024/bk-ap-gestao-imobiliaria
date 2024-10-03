@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
 {
-
     public class CreateClienteViewModel
     {
         public string Nome { get; set; } = null!;
@@ -73,7 +72,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
 
         public static ClienteViewModel ToClienteViewModel(this Cliente cliente)
         {
-            //Mapeamento
+            //Mapeamento -  AutoMapper
             return new ClienteViewModel
             {
                 ClienteId = cliente.ClienteId,

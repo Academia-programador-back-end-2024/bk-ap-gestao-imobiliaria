@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 
-namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web;
+namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
 
-public partial class Corretore
+public partial class Corretor
 {
     public int CorretorId { get; set; }
 

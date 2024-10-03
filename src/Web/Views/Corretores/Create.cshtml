@@ -1,12 +1,10 @@
-﻿@model Academia.Programador.Bk.Gestao.Imobiliaria.Web.Corretore
+﻿@model CriarCorretorViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Corretore</h4>
+<h1>Criar Corretor</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -37,15 +35,20 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+            <br/>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <span class="text-danger">@Html.ValidationSummary(true,"") </span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar</a>
 </div>
 
 @section Scripts {

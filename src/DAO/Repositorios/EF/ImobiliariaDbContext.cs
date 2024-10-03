@@ -1,6 +1,7 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Cliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Corretor;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ public partial class ImobiliariaDbContext : DbContext
 {
     public virtual DbSet<Cliente> Clientes { get; set; }
 
-    public virtual DbSet<Corretore> Corretores { get; set; }
+    public virtual DbSet<Corretor> Corretores { get; set; }
 
     public virtual DbSet<Favorito> Favoritos { get; set; }
 

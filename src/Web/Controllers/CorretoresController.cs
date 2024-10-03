@@ -1,22 +1,29 @@
-﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
     public class CorretoresController : Controller
     {
-        private readonly ImobiliariaDbContext _context;
+        private readonly IServiceCorretor _serviceCorretor;
+        private readonly ILogger<CorretoresController> _logger;
 
-        public CorretoresController(ImobiliariaDbContext context)
+        public CorretoresController(IServiceCorretor serviceCorretor, ILogger<CorretoresController> logger)
         {
-            _context = context;
+            _serviceCorretor = serviceCorretor;
+            _logger = logger;
         }
 
         // GET: Corretores
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Corretores.ToListAsync());
+            var corretoresVO = _serviceCorretor.TragaTodosCorretores();
+
+            _logger.LogInformation($"Hora que aconteceu uma visita {DateTime.Now.SomaDaHora()}");
+
+
+            return View(corretoresVO.ToCorretoresViewModel());
         }
 
         // GET: Corretores/Details/5
@@ -27,14 +34,14 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            var corretore = await _context.Corretores
-                .FirstOrDefaultAsync(m => m.CorretorId == id);
-            if (corretore == null)
+            CorretorViewModel corretor = _serviceCorretor.TragaCorretorPorId(id.Value).ToCorretorViewModel();
+
+            if (corretor == null)
             {
                 return NotFound();
             }
 
-            return View(corretore);
+            return View(corretor);
         }
 
         // GET: Corretores/Create
@@ -48,15 +55,14 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CorretorId,Nome,Cpf,Creci,Telefone,Email")] Corretore corretore)
+        public async Task<IActionResult> Create(CriarCorretorViewModel corretor)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(corretore);
-                await _context.SaveChangesAsync();
+                _serviceCorretor.CriarCorretor(corretor.ToCorretor());
                 return RedirectToAction(nameof(Index));
             }
-            return View(corretore);
+            return View(corretor);
         }
 
         // GET: Corretores/Edit/5
@@ -67,12 +73,13 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            var corretore = await _context.Corretores.FindAsync(id);
-            if (corretore == null)
+            EditarCorretorViewModel corretor = _serviceCorretor.TragaCorretorPorId(id.Value).ToEditarCorretorViewModel();
+
+            if (corretor == null)
             {
                 return NotFound();
             }
-            return View(corretore);
+            return View(corretor);
         }
 
         // POST: Corretores/Edit/5
@@ -80,9 +87,9 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CorretorId,Nome,Cpf,Creci,Telefone,Email")] Corretore corretore)
+        public async Task<IActionResult> Edit(int id, EditarCorretorViewModel corretor)
         {
-            if (id != corretore.CorretorId)
+            if (id != corretor.CorretorId)
             {
                 return NotFound();
             }
@@ -91,23 +98,15 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
             {
                 try
                 {
-                    _context.Update(corretore);
-                    await _context.SaveChangesAsync();
+                    _serviceCorretor.SalvarCorretor(corretor.ToCorretor());
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!CorretoreExists(corretore.CorretorId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError("", $"Erro ao salvar: {e.Message}");
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(corretore);
+            return View(corretor);
         }
 
         // GET: Corretores/Delete/5
@@ -118,14 +117,14 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            var corretore = await _context.Corretores
-                .FirstOrDefaultAsync(m => m.CorretorId == id);
-            if (corretore == null)
+            CorretorViewModel corretor = _serviceCorretor.TragaCorretorPorId(id.Value).ToCorretorViewModel();
+
+            if (corretor == null)
             {
                 return NotFound();
             }
 
-            return View(corretore);
+            return View(corretor);
         }
 
         // POST: Corretores/Delete/5
@@ -133,19 +132,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var corretore = await _context.Corretores.FindAsync(id);
-            if (corretore != null)
-            {
-                _context.Corretores.Remove(corretore);
-            }
-
-            await _context.SaveChangesAsync();
+            _serviceCorretor.Remover(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CorretoreExists(int id)
-        {
-            return _context.Corretores.Any(e => e.CorretorId == id);
         }
     }
 }
