@@ -1,24 +1,24 @@
-﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
     public class ImoveisController : Controller
     {
-        private readonly ImobiliariaDbContext _context;
+        private readonly IServiceImovel _serviceImovel;
 
-        public ImoveisController(ImobiliariaDbContext context)
+        public ImoveisController(IServiceImovel serviceImovel)
         {
-            _context = context;
+            _serviceImovel = serviceImovel;
         }
 
         // GET: Imovels
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var imobiliariaDbContext = _context.Imoveis.Include(i => i.ClienteDono).Include(i => i.CorretorGestor).Include(i => i.CorretorNegocio);
-            return View(await imobiliariaDbContext.ToListAsync());
+            var imoveisVo = _serviceImovel.TragaTodosImoveis();
+
+            return View(imoveisVo.ToImoveisViewModel());
         }
 
         // GET: Imovels/Details/5
@@ -29,11 +29,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            var imovel = await _context.Imoveis
-                .Include(i => i.ClienteDono)
-                .Include(i => i.CorretorGestor)
-                .Include(i => i.CorretorNegocio)
-                .FirstOrDefaultAsync(m => m.ImovelId == id);
+            var imovel = _serviceImovel.TragaImovelPorId(id.Value);
             if (imovel == null)
             {
                 return NotFound();
@@ -45,9 +41,9 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         // GET: Imovels/Create
         public IActionResult Create()
         {
-            ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf");
-            ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf");
-            ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf");
+            //ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf");
+            //ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf");
+            //ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf");
             return View();
         }
 
@@ -58,15 +54,16 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ImovelId,Endereco,Tipo,Area,Valor,Descricao,Negocio,CorretorNegocioId,CorretorGestorId,ClienteDonoId,Disponivel,Fotos")] Imovel imovel)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(imovel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf", imovel.ClienteDonoId);
-            ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorGestorId);
-            ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorNegocioId);
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(imovel);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf", imovel.ClienteDonoId);
+            //ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorGestorId);
+            //ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorNegocioId);
+            //
             return View(imovel);
         }
 
@@ -78,14 +75,15 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            var imovel = await _context.Imoveis.FindAsync(id);
+            var imovel = _serviceImovel.TragaImovelPorId(id.Value);
             if (imovel == null)
             {
                 return NotFound();
             }
-            ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf", imovel.ClienteDonoId);
-            ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorGestorId);
-            ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorNegocioId);
+            //ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf", imovel.ClienteDonoId);
+            //ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorGestorId);
+            //ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorNegocioId);
+
             return View(imovel);
         }
 
@@ -101,29 +99,30 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(imovel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ImovelExists(imovel.ImovelId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf", imovel.ClienteDonoId);
-            ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorGestorId);
-            ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorNegocioId);
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+            //        _context.Update(imovel);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!ImovelExists(imovel.ImovelId))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+            //ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf", imovel.ClienteDonoId);
+            //ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorGestorId);
+            //ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorNegocioId);
+            //
             return View(imovel);
         }
 
@@ -135,11 +134,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            var imovel = await _context.Imoveis
-                .Include(i => i.ClienteDono)
-                .Include(i => i.CorretorGestor)
-                .Include(i => i.CorretorNegocio)
-                .FirstOrDefaultAsync(m => m.ImovelId == id);
+            var imovel = _serviceImovel.TragaImovelPorId(id.Value);
             if (imovel == null)
             {
                 return NotFound();
@@ -153,19 +148,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var imovel = await _context.Imoveis.FindAsync(id);
-            if (imovel != null)
-            {
-                _context.Imoveis.Remove(imovel);
-            }
-
-            await _context.SaveChangesAsync();
+            _serviceImovel.Remover(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ImovelExists(int id)
-        {
-            return _context.Imoveis.Any(e => e.ImovelId == id);
         }
     }
 }

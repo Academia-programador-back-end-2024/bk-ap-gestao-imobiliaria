@@ -1,5 +1,6 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 

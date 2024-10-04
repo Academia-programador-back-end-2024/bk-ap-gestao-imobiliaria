@@ -1,7 +1,8 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 
-namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web;
+namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
 
 public partial class Imovel
 {
@@ -27,7 +28,7 @@ public partial class Imovel
 
     public bool Disponivel { get; set; }
 
-    public string? Fotos { get; set; }
+    public string? Fotos { get; set; }//Guardar um json de todas as fotos
 
     public virtual Cliente ClienteDono { get; set; } = null!;
 

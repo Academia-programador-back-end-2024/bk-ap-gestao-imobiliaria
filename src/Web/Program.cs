@@ -1,8 +1,7 @@
+using Academia.Programador.Bk.Gestao.Imobiliaria.DAO;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Configurations;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
-using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Corretor;
-using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
-using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -26,19 +25,15 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
                 options.UseSqlServer(connectionStrings.Master);
             });
 
-            builder.Services.AddTransient<IServiceCliente, ServiceCliente>();
-            builder.Services.AddTransient<IClienteRepositorio, ClienteRepositorio>();
-
-            builder.Services.AddTransient<IServiceCorretor, ServiceCorretor>();
-            builder.Services.AddTransient<ICorretorRepositorio, CorretorRepositorio>();
-
-
             builder.Services.Configure<ConnectionStrings>(
                 builder.Configuration.GetSection("ConnectionStrings"));
 
             builder.Services.Configure<Tokens>(
                 builder.Configuration.GetSection("Tokens"));
 
+
+            builder.Services.AdicionarImplementacoesDeDados();
+            builder.Services.AdicionarImplementacoesDominio();
 
             var app = builder.Build();
 
