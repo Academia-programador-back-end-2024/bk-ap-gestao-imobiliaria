@@ -88,7 +88,7 @@ public partial class ImobiliariaDbContext : DbContext
 
     public void Seed()
     {
-        Database.EnsureCreated();
+        //Database.EnsureCreated();
 
         if (Corretores.Count() == 0)
         {

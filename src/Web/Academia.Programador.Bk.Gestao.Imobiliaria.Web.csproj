@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Dominio\Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\fotos\" />
+  </ItemGroup>
+
 </Project>
