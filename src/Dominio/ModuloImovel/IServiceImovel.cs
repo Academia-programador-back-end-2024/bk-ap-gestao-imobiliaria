@@ -2,7 +2,7 @@
 
 public interface IServiceImovel
 {
-    void CriarImovel(Imovel imovel);
+    int CriarImovel(Imovel imovel);
     List<Imovel> TragaTodosImoveis();
     void SalvarImovel(Imovel imovel);
     Imovel TragaImovelPorId(int id);

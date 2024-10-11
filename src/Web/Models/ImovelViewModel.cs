@@ -16,10 +16,35 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
         Aluguel = 1
     }
 
-    public class CreateImovelViewModel
+    public class DetailsImovelViewModel
     {
         public int ImovelId { get; set; }
 
+        public string Endereco { get; set; } = null!;
+
+        public TipoImovel Tipo { get; set; }
+
+        public decimal Area { get; set; }
+
+        public decimal Valor { get; set; }
+
+        public string? Descricao { get; set; }
+
+        public TipoDeNegocio Negocio { get; set; }
+
+        public string? NomeCorretorNegocio { get; set; }
+
+        public string NomeCorretorGestor { get; set; }
+
+        public string NomeCliente { get; set; }
+
+        public bool Disponivel { get; set; }
+
+        public List<string> Fotos { get; set; }
+    }
+
+    public class CreateImovelViewModel
+    {
         public string Endereco { get; set; } = null!;
 
         public TipoImovel Tipo { get; set; }
@@ -83,6 +108,38 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
                 Descricao = createImovelViewModel.Descricao
             };
             return imovel;
+        }
+
+        public static DetailsImovelViewModel ToDetailImovelViewModel(this Imovel imovel)
+        {
+            var fotoDeCapa = "/imagens/not-found.png";
+            List<string> fotos = new();
+            if (string.IsNullOrEmpty(imovel.Fotos) is false)
+            {
+                fotos = JsonConvert.DeserializeObject<List<string>>(imovel.Fotos);
+            }
+            else
+            {
+                fotos.Add(fotoDeCapa);
+            }
+
+            var imovelViewModel = new DetailsImovelViewModel
+            {
+                ImovelId = imovel.ImovelId,
+                Area = imovel.Area,
+                Valor = imovel.Valor,
+                Disponivel = imovel.Disponivel,
+                Endereco = imovel.Endereco,
+                Fotos = fotos,
+                Negocio = (TipoDeNegocio)imovel.Negocio,
+                Tipo = (TipoImovel)imovel.Tipo,
+                Descricao = imovel.Descricao,
+                NomeCliente = imovel.ClienteDono.Nome,
+                NomeCorretorGestor = imovel.CorretorGestor.Nome,
+                NomeCorretorNegocio = imovel.CorretorNegocio?.Nome
+            };
+
+            return imovelViewModel;
         }
 
         public static ImovelViewModel ToImovelViewModel(this Imovel imovel)
