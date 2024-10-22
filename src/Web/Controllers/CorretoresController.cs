@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
-    public class CorretoresController : Controller
+    public class CorretoresController : BaseController
     {
         private readonly IServiceCorretor _serviceCorretor;
         private readonly ILogger<CorretoresController> _logger;

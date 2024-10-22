@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
-    public class FavoritosController : Controller
+    public class FavoritosController : BaseController
     {
         private readonly ImobiliariaDbContext _context;
 

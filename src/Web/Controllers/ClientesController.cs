@@ -1,10 +1,13 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
 {
-    public class ClientesController : Controller
+
+    public class ClientesController : BaseController
     {
         private readonly IServiceCliente _serviceCliente;
 
@@ -39,6 +42,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
         }
 
         // GET: Clientes/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
