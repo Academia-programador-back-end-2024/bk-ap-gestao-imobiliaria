@@ -4,6 +4,7 @@ using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_Imov
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloLogin;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,8 @@ public partial class ImobiliariaDbContext : DbContext
     public virtual DbSet<Imovel> Imoveis { get; set; }
 
     public virtual DbSet<MensagensContato> MensagensContatos { get; set; }
+    public virtual DbSet<Usuario> Usuarios { get; set; }
+    public virtual DbSet<Perfil> Perfis { get; set; }
 
     public ImobiliariaDbContext(DbContextOptions<ImobiliariaDbContext> options) : base(options)
     {
