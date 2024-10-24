@@ -1,4 +1,5 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloLogin;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,9 +12,9 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
     {
         private readonly ILoginService _loginService;
 
-        public LoginController()
+        public LoginController(ILoginService loginService)
         {
-            _loginService = new LoginService();
+            _loginService = loginService;
         }
 
         public IActionResult Login(string returnUrl = "")
@@ -98,6 +99,12 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme).Wait();
 
             return RedirectToAction("Index", $"Clientes");
+        }
+
+        public IActionResult Denied()
+        {
+
+            return View();
         }
     }
 }

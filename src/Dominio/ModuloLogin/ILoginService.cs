@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario;
+using Microsoft.AspNetCore.Identity;
 using System.Security.Authentication;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloLogin;

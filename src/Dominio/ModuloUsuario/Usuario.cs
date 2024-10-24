@@ -1,8 +1,7 @@
-﻿
-using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
 
-namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloLogin;
+namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario;
 
 public class Usuario
 {
@@ -17,8 +16,8 @@ public class Usuario
     public int ClienteId { get; set; }
     public int PerfilId { get; set; }
 
-    public Cliente Cliente { get; set; }
-    public Corretor Corretor { get; set; }
+    public Cliente? Cliente { get; set; }
+    public Corretor? Corretor { get; set; }
     public Perfil Perfil { get; set; }
 
 }
