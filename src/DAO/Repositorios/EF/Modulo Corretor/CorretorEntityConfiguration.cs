@@ -30,7 +30,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_
                 .HasOne(e => e.Usuario)
                 .WithOne(e => e.Corretor)
                 .HasForeignKey<Usuario>(e => e.CorretorId)
-                .IsRequired();
+                .HasConstraintName("FK_Usuario_Corretor");
         }
     }
 }

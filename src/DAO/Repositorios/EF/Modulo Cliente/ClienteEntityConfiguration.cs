@@ -24,8 +24,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_
             builder
                 .HasOne(e => e.Usuario)
                 .WithOne(e => e.Cliente)
-                .HasForeignKey<Usuario>(e => e.CorretorId)
-                .IsRequired();
+                .HasForeignKey<Usuario>(e => e.ClienteId)
+                .HasConstraintName("FK_Usuario_Cliente");
 
         }
     }

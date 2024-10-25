@@ -12,8 +12,8 @@ public class Usuario
     public DateTime DataCriacao { get; set; }
 
     //Mapeamento
-    public int CorretorId { get; set; }
-    public int ClienteId { get; set; }
+    public int? CorretorId { get; set; }
+    public int? ClienteId { get; set; }
     public int PerfilId { get; set; }
 
     public Cliente? Cliente { get; set; }
