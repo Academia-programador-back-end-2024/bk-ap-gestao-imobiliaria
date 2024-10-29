@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
-    public class MensagensContatoesController : Controller
+    public class MensagensContatoesController : BaseController
     {
         private readonly ImobiliariaDbContext _context;
 

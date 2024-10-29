@@ -2,6 +2,7 @@ using Academia.Programador.Bk.Gestao.Imobiliaria.DAO;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Configurations;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -35,6 +36,19 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
             builder.Services.AdicionarImplementacoesDeDados();
             builder.Services.AdicionarImplementacoesDominio();
 
+
+            //Autenticação
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                    options.SlidingExpiration = true;
+                    options.AccessDeniedPath = "/Login/Denied/";
+                    options.LoginPath = "/Login/Login"; // Defenir página de login
+                    options.LogoutPath = "/Login/Logout"; // Defenir página logout
+                });
+
             var app = builder.Build();
 
 
@@ -54,6 +68,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

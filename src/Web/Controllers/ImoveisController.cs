@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
-    public class ImoveisController : Controller
+    public class ImoveisController : BaseController
     {
         private readonly IServiceImovel _serviceImovel;
         private readonly IServiceCliente _serviceCliente;
