@@ -1,4 +1,5 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
+using Newtonsoft.Json;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
 {
@@ -13,6 +14,34 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
     {
         Venda = 0,
         Aluguel = 1
+    }
+
+    public class CreateImovelViewModel
+    {
+        public int ImovelId { get; set; }
+
+        public string Endereco { get; set; } = null!;
+
+        public TipoImovel Tipo { get; set; }
+
+        public decimal Area { get; set; }
+
+        public decimal Valor { get; set; }
+
+        public string? Descricao { get; set; }
+
+        public TipoDeNegocio Negocio { get; set; }
+
+        public int? CorretorNegocioId { get; set; }
+
+        public int CorretorGestorId { get; set; }
+
+        public int ClienteDonoId { get; set; }
+
+        public bool Disponivel { get; set; }
+
+        public List<IFormFile>? Fotos { get; set; }//Guardar um json de todas as fotos
+
     }
 
     public class ImovelViewModel
@@ -38,8 +67,33 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
 
     public static class ImovelViewModelExtensions
     {
+        public static Imovel ToImovel(this CreateImovelViewModel createImovelViewModel)
+        {
+            var imovel = new Imovel
+            {
+                Area = createImovelViewModel.Area,
+                Valor = createImovelViewModel.Valor,
+                Disponivel = createImovelViewModel.Disponivel,
+                Endereco = createImovelViewModel.Endereco,
+                Negocio = (int)createImovelViewModel.Negocio,
+                Tipo = (int)createImovelViewModel.Tipo,
+                ClienteDonoId = createImovelViewModel.ClienteDonoId,
+                CorretorGestorId = createImovelViewModel.CorretorGestorId,
+                CorretorNegocioId = createImovelViewModel.CorretorNegocioId,
+                Descricao = createImovelViewModel.Descricao
+            };
+            return imovel;
+        }
+
         public static ImovelViewModel ToImovelViewModel(this Imovel imovel)
         {
+            string fotoDeCapa = "/imagens/not-found.png";
+            if (string.IsNullOrEmpty(imovel.Fotos) is false)
+            {
+                List<string> fotos = JsonConvert.DeserializeObject<List<string>>(imovel.Fotos);
+                fotoDeCapa = fotos.First();
+            }
+
             var imovelViewModel = new ImovelViewModel
             {
                 ImovelId = imovel.ImovelId,
@@ -47,7 +101,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
                 Valor = imovel.Valor,
                 Disponivel = imovel.Disponivel,
                 Endereco = imovel.Endereco,
-                FotoDeCapa = "/imagens/not-found.png",
+                FotoDeCapa = fotoDeCapa,
                 Negocio = (TipoDeNegocio)imovel.Negocio,
                 Tipo = (TipoImovel)imovel.Tipo
             };

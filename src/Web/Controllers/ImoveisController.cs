@@ -1,16 +1,27 @@
-﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
     public class ImoveisController : Controller
     {
         private readonly IServiceImovel _serviceImovel;
+        private readonly IServiceCliente _serviceCliente;
+        private readonly IServiceCorretor _serviceCorretor;
 
-        public ImoveisController(IServiceImovel serviceImovel)
+        public ImoveisController(
+            IServiceImovel serviceImovel,
+            IServiceCliente serviceCliente,
+            IServiceCorretor serviceCorretor)
         {
             _serviceImovel = serviceImovel;
+            _serviceCliente = serviceCliente;
+            _serviceCorretor = serviceCorretor;
         }
 
         // GET: Imovels
@@ -41,9 +52,11 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         // GET: Imovels/Create
         public IActionResult Create()
         {
-            //ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf");
-            //ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf");
-            //ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf");
+            var clientes = _serviceCliente.TragaTodosClientes();
+            var corretores = _serviceCorretor.TragaTodosCorretores();
+            ViewData["ClienteDonoId"] = new SelectList(clientes, "ClienteId", "Cpf");
+            ViewData["CorretorGestorId"] = new SelectList(corretores, "CorretorId", "Cpf");
+            ViewData["CorretorNegocioId"] = new SelectList(corretores, "CorretorId", "Cpf");
             return View();
         }
 
@@ -52,18 +65,58 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImovelId,Endereco,Tipo,Area,Valor,Descricao,Negocio,CorretorNegocioId,CorretorGestorId,ClienteDonoId,Disponivel,Fotos")] Imovel imovel)
+        public async Task<IActionResult> Create(CreateImovelViewModel imovel)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(imovel);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["ClienteDonoId"] = new SelectList(_context.Clientes, "ClienteId", "Cpf", imovel.ClienteDonoId);
-            //ViewData["CorretorGestorId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorGestorId);
-            //ViewData["CorretorNegocioId"] = new SelectList(_context.Corretores, "CorretorId", "Cpf", imovel.CorretorNegocioId);
-            //
+            if (ModelState.IsValid)
+            {
+                var imovelVo = imovel.ToImovel();
+
+                _serviceImovel.CriarImovel(imovelVo);
+
+
+
+                var fotosUrls = new List<string>();
+
+                if (imovel.Fotos != null) //&& ArquivosFotos.Any())
+                {
+                    foreach (var foto in imovel.Fotos)
+                    {
+                        // Salvar o arquivo em um diretório no servidor ou na nuvem
+                        var fileVirtualPath = $"fotos/{imovel.ImovelId}/";
+                        var directoryImovel = Path.Combine("wwwroot", fileVirtualPath);
+                        if (Directory.Exists(directoryImovel) is false)
+                        {
+                            Directory.CreateDirectory(directoryImovel);
+                        }
+
+                        fileVirtualPath += "/" + foto.FileName;
+                        var filePath = Path.Combine(directoryImovel, foto.FileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await foto.CopyToAsync(stream);
+                        }
+
+                        // Adicionar o caminho salvo à lista de URLs
+                        fotosUrls.Add("/" + fileVirtualPath); // Aqui você pode usar URLs reais
+                    }
+                }
+
+                imovelVo.Fotos = JsonConvert.SerializeObject(fotosUrls);
+
+                _serviceImovel.SalvarImovel(imovelVo);
+
+
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            var clientes = _serviceCliente.TragaTodosClientes();
+            var corretores = _serviceCorretor.TragaTodosCorretores();
+            ViewData["ClienteDonoId"] = new SelectList(clientes, "ClienteId", "Cpf");
+            ViewData["CorretorGestorId"] = new SelectList(corretores, "CorretorId", "Cpf");
+            ViewData["CorretorNegocioId"] = new SelectList(corretores, "CorretorId", "Cpf");
+
             return View(imovel);
         }
 

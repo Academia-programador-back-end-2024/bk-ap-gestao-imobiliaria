@@ -14,7 +14,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_
 
         public void CriarImovel(Imovel imovel)
         {
-            throw new NotImplementedException();
+            _dbContext.Add(imovel);
+            _dbContext.SaveChanges();
         }
 
         public List<Imovel> TragaTodosImoveles()
@@ -32,7 +33,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_
 
         public void SalvarImovel(Imovel imovel)
         {
-            throw new NotImplementedException();
+            _dbContext.Update(imovel);
+            _dbContext.SaveChanges();
         }
 
         public Imovel TragaImovelPorId(int? id)
