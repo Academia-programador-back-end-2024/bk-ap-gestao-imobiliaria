@@ -9,11 +9,12 @@ public class ServiceImovel : IServiceImovel
         _imovelRepositorio = imovelRepositorio;
     }
 
-    public void CriarImovel(Imovel imovel)
+    public int CriarImovel(Imovel imovel)
     {
         //TODO: Validação de duplicidade
 
         _imovelRepositorio.CriarImovel(imovel);
+        return imovel.ImovelId;
     }
 
     public List<Imovel> TragaTodosImoveis()

@@ -46,7 +46,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            return View(imovel);
+            return View(imovel.ToDetailImovelViewModel());
         }
 
         // GET: Imovels/Create
@@ -71,8 +71,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
             {
                 var imovelVo = imovel.ToImovel();
 
-                _serviceImovel.CriarImovel(imovelVo);
-
+                var imovelId = _serviceImovel.CriarImovel(imovelVo);
 
 
                 var fotosUrls = new List<string>();
@@ -82,7 +81,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                     foreach (var foto in imovel.Fotos)
                     {
                         // Salvar o arquivo em um diretório no servidor ou na nuvem
-                        var fileVirtualPath = $"fotos/{imovel.ImovelId}/";
+                        var fileVirtualPath = $"fotos/{imovelId}/";
                         var directoryImovel = Path.Combine("wwwroot", fileVirtualPath);
                         if (Directory.Exists(directoryImovel) is false)
                         {
@@ -101,6 +100,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                         fotosUrls.Add("/" + fileVirtualPath); // Aqui você pode usar URLs reais
                     }
                 }
+
+                imovelVo = _serviceImovel.TragaImovelPorId(imovelId);
 
                 imovelVo.Fotos = JsonConvert.SerializeObject(fotosUrls);
 
