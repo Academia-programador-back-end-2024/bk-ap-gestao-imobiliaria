@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
 {
-    public class CreateUsuarioViewModel
+    public class UsuarioViewModel
     {
         [Required]
         public string Nome { get; set; } = null!;
@@ -20,56 +20,39 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models
 
         public int? CorretorId { get; set; }
         public int? PerfilId { get; set; }
-    }
-
-    public class UsuarioViewModel
-    {
-        public int UsuarioId { get; set; }
-
-        public string Nome { get; set; } = null!;
-
-        public string Email { get; set; } = null!;
-
-        public int PerfilId { get; set; }
-
-        public int? ClienteId { get; set; }
-
-        public int? CorretorId { get; set; }
-
-        public DateTime DataCriacao { get; set; }
+        public int? UsuarioId { get; set; }
+        public DateTime DataCriacao { get; set; } = DateTime.Now;
     }
 
     public static class UsuarioViewModelExtensions
     {
-        public static Usuario ToUsuario(this CreateUsuarioViewModel usuarioViewModel, string senhaHash)
+        public static Usuario ToUsuario(this UsuarioViewModel createUsuarioViewModel)
         {
             // Mapeamento para a entidade Usuario
-            return new Usuario
+            var user = new Usuario
             {
-                Nome = usuarioViewModel.Nome,
-                Email = usuarioViewModel.Email,
-                SenhaHash = senhaHash,
-                ClienteId = usuarioViewModel.ClienteId.Value,
-                CorretorId = usuarioViewModel.CorretorId.Value,
-                PerfilId = usuarioViewModel.ClienteId.HasValue ? 1 : (usuarioViewModel.CorretorId.HasValue ? 2 : 3) // 1: Cliente, 2: Corretor, 3: Administrador
-            };
-        }
+                Nome = createUsuarioViewModel.Nome,
+                Email = createUsuarioViewModel.Email,
+                SenhaHash = createUsuarioViewModel.Senha,
+                DataCriacao = createUsuarioViewModel.DataCriacao,
+                PerfilId = createUsuarioViewModel.ClienteId.HasValue ? 1 : (createUsuarioViewModel.CorretorId.HasValue ? 2 : 3) // 1: Cliente, 2: Corretor, 3: Administrador,
 
-        public static Usuario ToUsuario(this UsuarioViewModel usuarioViewModel)
-        {
-            // Mapeamento para a entidade Usuario
-            return new Usuario
-            {
-                UsuarioId = usuarioViewModel.UsuarioId,
-                Nome = usuarioViewModel.Nome,
-                Email = usuarioViewModel.Email,
-                PerfilId = usuarioViewModel.PerfilId,
-                ClienteId = usuarioViewModel.ClienteId.Value,
-                CorretorId = usuarioViewModel.CorretorId.Value,
-                DataCriacao = usuarioViewModel.DataCriacao
             };
-        }
 
+            user.ClienteId = createUsuarioViewModel.ClienteId.HasValue
+                ? createUsuarioViewModel.ClienteId.Value
+                : user.ClienteId;
+
+            user.CorretorId = createUsuarioViewModel.CorretorId.HasValue
+                ? createUsuarioViewModel.CorretorId.Value
+                : user.CorretorId;
+
+            user.UsuarioId = createUsuarioViewModel.UsuarioId.HasValue
+                ? createUsuarioViewModel.UsuarioId.Value
+                : user.UsuarioId;
+
+            return user;
+        }
         public static UsuarioViewModel ToUsuarioViewModel(this Usuario usuario)
         {
             // Mapeamento de Usuario para UsuarioViewModel

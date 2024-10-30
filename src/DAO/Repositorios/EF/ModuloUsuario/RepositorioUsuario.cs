@@ -20,7 +20,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.ModuloU
 
         public List<Usuario> TragaTodos()
         {
-            return _context.Usuarios.ToList();
+            return _context.Usuarios.Include(user => user.Perfil).ToList();
         }
 
         public void Salvar(Usuario model)

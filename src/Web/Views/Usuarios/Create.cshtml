@@ -1,4 +1,6 @@
-﻿@model CreateUsuarioViewModel
+﻿@using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model UsuarioViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -26,18 +28,37 @@
                 <span asp-validation-for="Senha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CorretorId" class="control-label"></label>
-                <input asp-for="CorretorId" class="form-control" asp-items="ViewBag.CorretorId"></input>
+                <label for="CorretorId" class="control-label">Escolha o corretor </label>
+                <select name="CorretorId" class="form-control">
+                    @foreach (CorretorViewModel corretor in ViewBag.Corretores)
+                    {
+                        <option value="@corretor.CorretorId">@corretor.Nome</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="ClienteId" class="control-label"></label>
-                <input asp-for="ClienteId" class="form-control" asp-items="ViewBag.ClienteId"></input>
+                <label for="ClienteId" class="control-label">Escolha o cliente </label>
+                <select name="ClienteId" class="form-control">
+                    @foreach (ClienteViewModel cliente in ViewBag.Clientes)
+                    {
+                        <option value="@cliente.ClienteId">@cliente.Nome</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="PerfilId" class="control-label"></label>
-                <input asp-for="PerfilId" class="form-control" asp-items="ViewBag.PerfilId"></input>
+                <label for="PerfilId" class="control-label">Escolha o perfil </label>
+                <select name="PerfilId" class="form-control">
+                    @foreach (Perfil perfil in Perfil.Perfis)
+                    {
+                        <option value="@perfil.PerfilId">@perfil.Nome</option>
+                    }
+                </select>
             </div>
-            </br>
+            <div class="form-group">
+                <span class="text-danger">@Html.ValidationSummary(true,"") </span>
+            </div>
+
+            <br/>
             <div class="form-group">
                 <input type="submit" value="Criar" class="btn btn-primary" />
             </div>
