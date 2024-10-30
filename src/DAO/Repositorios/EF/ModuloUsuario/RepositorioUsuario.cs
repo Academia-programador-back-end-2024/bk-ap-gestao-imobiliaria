@@ -25,7 +25,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.ModuloU
 
         public void Salvar(Usuario model)
         {
-            var usuarioExistente = _context.Usuarios.Local.FirstOrDefault(c => c.UsuarioId == model.UsuarioId);
+            var usuarioExistente = _context.Usuarios.FirstOrDefault(c => c.UsuarioId == model.UsuarioId);
             if (usuarioExistente != null)
             {
                 _context.Entry(usuarioExistente).State = EntityState.Detached;
@@ -36,13 +36,13 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.ModuloU
 
         public Usuario TragaPorId(int id)
         {
-            var usuarioExistente = _context.Usuarios.Local.FirstOrDefault(c => c.UsuarioId == id);
+            var usuarioExistente = _context.Usuarios.FirstOrDefault(c => c.UsuarioId == id);
             return usuarioExistente;
         }
 
         public void Remover(int id)
         {
-            var usuarioExistente = _context.Usuarios.Local.FirstOrDefault(c => c.UsuarioId == id);
+            var usuarioExistente = _context.Usuarios.FirstOrDefault(c => c.UsuarioId == id);
             if (usuarioExistente != null)
             {
                 _context.Entry(usuarioExistente).State = EntityState.Detached;

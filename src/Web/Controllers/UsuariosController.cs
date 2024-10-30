@@ -88,8 +88,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Clientes = _serviceCliente.TragaTodosClientes().ToClientesViewModel();
-            ViewBag.Corretores = _serviceCorretor.TragaTodosCorretores().ToCorretoresViewModel();
+            ViewBag.Clientes = _serviceCliente.TragaTodosClientes().FindAll(x => x.Usuario == null).ToClientesViewModel();
+            ViewBag.Corretores = _serviceCorretor.TragaTodosCorretores().FindAll(x => x.Usuario == null).ToCorretoresViewModel();
             return View(usuario.ToUsuarioViewModel());
         }
 

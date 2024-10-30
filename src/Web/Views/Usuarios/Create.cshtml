@@ -29,7 +29,8 @@
             </div>
             <div class="form-group">
                 <label for="CorretorId" class="control-label">Escolha o corretor </label>
-                <select name="CorretorId" class="form-control">
+                <select name="CorretorId" id="CorretorId" class="form-control" onchange="toggleSelection('CorretorId', 'ClienteId')">
+                    <option value="">Nenhum</option>
                     @foreach (CorretorViewModel corretor in ViewBag.Corretores)
                     {
                         <option value="@corretor.CorretorId">@corretor.Nome</option>
@@ -38,7 +39,8 @@
             </div>
             <div class="form-group">
                 <label for="ClienteId" class="control-label">Escolha o cliente </label>
-                <select name="ClienteId" class="form-control">
+                <select name="ClienteId" id="ClienteId" class="form-control" onchange="toggleSelection('ClienteId', 'CorretorId')">
+                    <option value="">Nenhum</option>
                     @foreach (ClienteViewModel cliente in ViewBag.Clientes)
                     {
                         <option value="@cliente.ClienteId">@cliente.Nome</option>
@@ -72,4 +74,15 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function toggleSelection(selectedId, otherId) {
+            // Get the selected value
+            var selectedValue = document.getElementById(selectedId).value;
+
+            // If a valid option is selected, set the other select to 'Nenhum'
+            if (selectedValue) {
+                document.getElementById(otherId).value = "";
+            }
+        }
+    </script>
 }
