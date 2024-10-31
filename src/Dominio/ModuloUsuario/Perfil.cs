@@ -7,4 +7,7 @@ public class Perfil
 
     //Mapeamento 
     public virtual List<Usuario> Usuarios { get; set; }
+
+    public static IEnumerable<Perfil> Perfis { get; set; }
 }
+

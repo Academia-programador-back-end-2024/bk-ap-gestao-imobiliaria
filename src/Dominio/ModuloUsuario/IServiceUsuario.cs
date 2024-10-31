@@ -1,4 +1,5 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.Compartilhada;
+using Microsoft.AspNetCore.Identity;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario
 {
@@ -9,14 +10,20 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario
     public class ServiceUsuario : IServiceUsuario
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
+        private readonly IPasswordHasher<Usuario> _passwordHasher;
 
         public ServiceUsuario(IUsuarioRepositorio usuarioRepositorio)
         {
             _usuarioRepositorio = usuarioRepositorio;
+            _passwordHasher = new PasswordHasher<Usuario>(); ;
         }
 
         public void Criar(Usuario model)
         {
+            //TODO: Fazer hash da senha
+            var hashDaSenha = _passwordHasher.HashPassword(model, model.SenhaHash);
+            model.SenhaHash = hashDaSenha;
+
             _usuarioRepositorio.Criar(model);
         }
 

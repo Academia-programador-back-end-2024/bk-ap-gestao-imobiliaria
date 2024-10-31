@@ -1,4 +1,6 @@
-﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +11,16 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
     public class UsuariosController : Controller
     {
         private readonly IServiceUsuario _serviceUsuario;
-
-        public UsuariosController(IServiceUsuario serviceUsuario)
+        private readonly IServiceCliente _serviceCliente;
+        private readonly IServiceCorretor _serviceCorretor;
+        public UsuariosController(
+            IServiceUsuario serviceUsuario,
+            IServiceCliente serviceCliente,
+            IServiceCorretor serviceCorretor)
         {
             _serviceUsuario = serviceUsuario;
+            _serviceCliente = serviceCliente;
+            _serviceCorretor = serviceCorretor;
         }
 
         // GET: Usuarios
@@ -37,12 +45,15 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(usuario.ToUsuarioViewModel());
         }
 
         // GET: Usuarios/Create
         public IActionResult Create()
         {
+            ViewBag.Clientes = _serviceCliente.TragaTodosClientes().FindAll(x => x.Usuario == null).ToClientesViewModel();
+            ViewBag.Corretores = _serviceCorretor.TragaTodosCorretores().FindAll(x => x.Usuario == null).ToCorretoresViewModel();
+
             return View();
         }
 
@@ -58,6 +69,9 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 _serviceUsuario.Criar(usuario.ToUsuario());
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Clientes = _serviceCliente.TragaTodosClientes().FindAll(x => x.Usuario == null).ToClientesViewModel();
+            ViewBag.Corretores = _serviceCorretor.TragaTodosCorretores().FindAll(x => x.Usuario == null).ToCorretoresViewModel();
             return View(usuario);
         }
 
@@ -74,7 +88,9 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
             {
                 return NotFound();
             }
-            return View(usuario);
+            ViewBag.Clientes = _serviceCliente.TragaTodosClientes().FindAll(x => x.Usuario == null).ToClientesViewModel();
+            ViewBag.Corretores = _serviceCorretor.TragaTodosCorretores().FindAll(x => x.Usuario == null).ToCorretoresViewModel();
+            return View(usuario.ToUsuarioViewModel());
         }
 
         // POST: Usuarios/Edit/5
@@ -102,6 +118,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                     ModelState.AddModelError("", e.Message);
                 }
             }
+            ViewBag.Clientes = _serviceCliente.TragaTodosClientes().FindAll(x => x.Usuario == null).ToClientesViewModel();
+            ViewBag.Corretores = _serviceCorretor.TragaTodosCorretores().FindAll(x => x.Usuario == null).ToCorretoresViewModel();
             return View(usuario);
         }
 
@@ -119,7 +137,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
                 return NotFound();
             }
 
-            return View(usuario);
+            return View(usuario.ToUsuarioViewModel());
         }
 
         // POST: Usuarios/Delete/5

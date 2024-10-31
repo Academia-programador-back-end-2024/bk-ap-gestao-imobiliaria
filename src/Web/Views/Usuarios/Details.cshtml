@@ -1,13 +1,13 @@
-﻿@model Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario.Usuario
+﻿@model UsuarioViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalhes Usuario</h1>
 
 <div>
-    <h4>Usuario</h4>
+    
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -23,26 +23,14 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SenhaHash)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SenhaHash)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DataCriacao)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DataCriacao)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Perfil)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Perfil.Nome)
-        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.UsuarioId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.UsuarioId">Editar</a> |
+    <a asp-action="Index">Voltar</a>
 </div>
