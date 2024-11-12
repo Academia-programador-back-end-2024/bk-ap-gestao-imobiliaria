@@ -1,10 +1,8 @@
-﻿namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.Compartilhada;
 
-public interface IImovelRepositorio
+namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
+
+public interface IImovelRepositorio : IRepositorio<Imovel>
 {
-    void CriarImovel(Imovel imovel);
-    List<Imovel> TragaTodosImoveles();
-    void SalvarImovel(Imovel imovel);
-    Imovel TragaImovelPorId(int? id);
-    void Remover(int id);
+    List<Imovel> TragaOsMaisRecentes(int NumeroDeImoveis);
 }

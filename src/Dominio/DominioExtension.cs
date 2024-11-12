@@ -1,4 +1,5 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCliente;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloConvidado;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloLogin;
@@ -16,6 +17,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Dominio
             services.AddTransient<IServiceCorretor, ServiceCorretor>();
             services.AddTransient<IServiceImovel, ServiceImovel>();
             services.AddTransient<IServiceUsuario, ServiceUsuario>();
+            services.AddTransient<IServiceConvidado, ServiceConvidado>();
             services.AddTransient<ILoginService, LoginService>();
         }
     }

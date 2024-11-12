@@ -12,31 +12,6 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_
             _dbContext = dbContext;
         }
 
-        public void CriarImovel(Imovel imovel)
-        {
-            _dbContext.Add(imovel);
-            _dbContext.SaveChanges();
-        }
-
-        public List<Imovel> TragaTodosImoveles()
-        {
-            var imobiliariaDbContext =
-                _dbContext.Imoveis;
-
-
-            //imobiliariaDbContext.Include(i => i.ClienteDono)
-            //    .Include(i => i.CorretorGestor)
-            //    .Include(i => i.CorretorNegocio);
-
-            return imobiliariaDbContext.ToList();
-        }
-
-        public void SalvarImovel(Imovel imovel)
-        {
-            _dbContext.Update(imovel);
-            _dbContext.SaveChanges();
-        }
-
         public Imovel TragaImovelPorId(int? id)
         {
             return _dbContext.Imoveis
@@ -44,6 +19,43 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_
                 .Include(i => i.CorretorGestor)
                 .Include(i => i.CorretorNegocio)
                 .FirstOrDefault(m => m.ImovelId == id);
+        }
+
+        public void Criar(Imovel model)
+        {
+            _dbContext.Add(model);
+            _dbContext.SaveChanges();
+        }
+
+        public List<Imovel> TragaTodos()
+        {
+            var imobiliariaDbContext =
+                _dbContext.Imoveis.
+                    Include(i => i.ClienteDono) // Carrega o cliente dono
+                    .Include(i => i.CorretorGestor) // Carrega o corretor gestor
+                    .Include(i => i.CorretorNegocio); // Carrega o corretor de negócio
+            ;
+
+            return imobiliariaDbContext.ToList();
+        }
+
+        public void Salvar(Imovel model)
+        {
+            _dbContext.Update(model);
+            _dbContext.SaveChanges();
+        }
+
+        public Imovel TragaPorId(int id)
+        {
+            var imobiliariaDbContext =
+                _dbContext.Imoveis
+                    .Where(x => x.ImovelId == id)
+                    .Include(i => i.ClienteDono) // Carrega o cliente dono
+                    .Include(i => i.CorretorGestor) // Carrega o corretor gestor
+                    .Include(i => i.CorretorNegocio); // Carrega o corretor de negócio
+
+
+            return imobiliariaDbContext.FirstOrDefault();
         }
 
         public void Remover(int id)
@@ -56,5 +68,20 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF.Modulo_
 
             _dbContext.SaveChanges();
         }
+
+        public List<Imovel> TragaOsMaisRecentes(int NumeroDeImoveis)
+        {
+            // Consulta para trazer somente imóveis disponíveis, ordenados por ID de forma decrescente
+            var imobiliariaDbContext = _dbContext.Imoveis
+                .Where(imovel => imovel.Disponivel) // Filtra apenas imóveis disponíveis
+                .OrderByDescending(imovel => imovel.ImovelId) // Ordena pelos mais recentes
+                .Take(NumeroDeImoveis) // Limita a quantidade pelo parâmetro fornecido
+                .Include(i => i.ClienteDono) // Carrega o cliente dono
+                .Include(i => i.CorretorGestor) // Carrega o corretor gestor
+                .Include(i => i.CorretorNegocio); // Carrega o corretor de negócio
+
+            return imobiliariaDbContext.ToList(); // Retorna a lista
+        }
+
     }
 }

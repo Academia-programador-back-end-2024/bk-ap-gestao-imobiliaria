@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
-    [Authorize(Roles = "Corretor")]
+    [Authorize(Roles = "Corretor,Administrador")]
     public class CorretoresController : BaseController
     {
         private readonly IServiceCorretor _serviceCorretor;

@@ -2,12 +2,14 @@
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloCorretor;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
+    [Authorize]
     public class ImoveisController : BaseController
     {
         private readonly IServiceImovel _serviceImovel;

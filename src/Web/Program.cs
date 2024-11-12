@@ -36,16 +36,17 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
             builder.Services.AdicionarImplementacoesDeDados();
             builder.Services.AdicionarImplementacoesDominio();
 
+            // Registro do BackgroundService
+            builder.Services.AddHostedService<ServicoTrasDosPanos>();
 
             //Autenticação
-
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                     options.SlidingExpiration = true;
                     options.AccessDeniedPath = "/Login/Denied/";
-                    options.LoginPath = "/Login/Login"; // Defenir página de login
+                    options.LoginPath = "/Convidado/Index"; // Defenir página de login
                     options.LogoutPath = "/Login/Logout"; // Defenir página logout
                 });
 

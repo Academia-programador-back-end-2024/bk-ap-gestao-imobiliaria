@@ -3,11 +3,13 @@ using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloUsuario;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
+    [AllowAnonymous]
     public class LoginController : Controller
     {
         private readonly ILoginService _loginService;

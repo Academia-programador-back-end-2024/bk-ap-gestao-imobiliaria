@@ -1,10 +1,12 @@
 ﻿using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Controllers
 {
+    [Authorize]
     public class FavoritosController : BaseController
     {
         private readonly ImobiliariaDbContext _context;

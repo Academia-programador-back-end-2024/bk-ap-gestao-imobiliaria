@@ -13,24 +13,24 @@ public class ServiceImovel : IServiceImovel
     {
         //TODO: Validação de duplicidade
 
-        _imovelRepositorio.CriarImovel(imovel);
+        _imovelRepositorio.Criar(imovel);
         return imovel.ImovelId;
     }
 
     public List<Imovel> TragaTodosImoveis()
     {
-        return _imovelRepositorio.TragaTodosImoveles();
+        return _imovelRepositorio.TragaTodos();
     }
 
     public void SalvarImovel(Imovel imovel)
     {
         //TODO: Validação de duplicidade
-        _imovelRepositorio.SalvarImovel(imovel);
+        _imovelRepositorio.Salvar(imovel);
     }
 
     public Imovel TragaImovelPorId(int id)
     {
-        return _imovelRepositorio.TragaImovelPorId(id);
+        return _imovelRepositorio.TragaPorId(id);
     }
 
     public void Remover(int id)
