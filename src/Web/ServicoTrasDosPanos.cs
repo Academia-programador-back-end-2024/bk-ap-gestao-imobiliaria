@@ -1,4 +1,4 @@
-﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloImovel;
+﻿using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio.ModuloConvidado;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
 {
@@ -21,11 +21,11 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
                 // Criando escopo para acessar o ImobiliariaDbContext
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    var serviceImovel = scope.ServiceProvider.GetRequiredService<IServiceImovel>();
-                    var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
+                    var serviceImovel = scope.ServiceProvider.GetRequiredService<IServiceConvidado>();
+                    //var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
 
                     // TODO: Lógica a ser executada em segundo plano, como limpeza ou verificações
-                    logger.LogInformation("Serviço de background executando...");
+                    //logger.LogInformation("Serviço de background executando...");
 
                     // Exemplo: Atualizando dados, limpando registros ou checando status
                     // dbContext.MinhasTarefasDeBackground();

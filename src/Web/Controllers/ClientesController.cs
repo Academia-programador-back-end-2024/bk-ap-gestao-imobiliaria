@@ -6,22 +6,48 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views
 {
+    public class ClienteApiService
+    {
+        private readonly IConfiguration Configuration;
+        private readonly HttpClient _httpClient;
+        private readonly string ImobiliariaApiEndpoint;
+
+        public ClienteApiService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient();
+            Configuration = configuration;
+            ImobiliariaApiEndpoint = Configuration["ImobiliariaApiEndpoint"] + "/api/cliente";
+        }
+
+        public async Task<Cliente[]> Get()
+        {
+            return await _httpClient.GetFromJsonAsync<Cliente[]>(ImobiliariaApiEndpoint);
+        }
+    }
+
     [Authorize(Roles = "Administrador,Corretor")]
     public class ClientesController : BaseController
     {
         private readonly IServiceCliente _serviceCliente;
+        private readonly ClienteApiService _clienteApi;
 
-        public ClientesController(IServiceCliente serviceCliente)
+        public ClientesController(IServiceCliente serviceCliente, ClienteApiService clienteApi)
         {
             _serviceCliente = serviceCliente;
+            _clienteApi = clienteApi;
         }
 
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-            var clientesVo = _serviceCliente.TragaTodosClientes();
+            //Monolito, vai diretamente no banco de dados
+            //var clientesVo = _serviceCliente.TragaTodosClientes();
 
-            return View(clientesVo.ToClientesViewModel());
+            List<Cliente> clientes = new();
+            var clientesVo = await _clienteApi.Get();
+            clientes.AddRange(clientesVo);
+
+            return View(clientes.ToClientesViewModel());
         }
 
         // GET: Clientes/Details/5

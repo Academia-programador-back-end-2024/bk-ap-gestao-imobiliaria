@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Academia.Programador.Bk.Ges
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E0357BCA-F720-423B-BB8F-AEFB1A4917CE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Academia.Programador.Bk.Gestao.Imobiliaria.Api", "Academia.Programador.Bk.Gestao.Imobiliaria.Api\Academia.Programador.Bk.Gestao.Imobiliaria.Api.csproj", "{6C5E54D2-71B6-48F2-844A-3EE7363BD0B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{E0357BCA-F720-423B-BB8F-AEFB1A4917CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0357BCA-F720-423B-BB8F-AEFB1A4917CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0357BCA-F720-423B-BB8F-AEFB1A4917CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C5E54D2-71B6-48F2-844A-3EE7363BD0B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C5E54D2-71B6-48F2-844A-3EE7363BD0B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C5E54D2-71B6-48F2-844A-3EE7363BD0B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C5E54D2-71B6-48F2-844A-3EE7363BD0B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{F2A8A489-7C44-4283-90FB-D28A61CCD525} = {A637E40B-F316-4BEE-B74F-D78522415019}
 		{1C8168D2-4631-4FF6-A4ED-347215360340} = {12F15B04-1F22-4273-8944-D3437AF21F19}
 		{2AA13F62-FF2D-42DA-9CB3-904AA904A483} = {653F425B-3F53-48C2-AFF1-42D6F125601B}
+		{6C5E54D2-71B6-48F2-844A-3EE7363BD0B5} = {56756ED5-2807-4D62-849F-427BF5F822A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {39FCA1FE-B541-4185-AAF4-99A4D644217B}

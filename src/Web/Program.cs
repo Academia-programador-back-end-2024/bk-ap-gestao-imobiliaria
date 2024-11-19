@@ -2,6 +2,7 @@ using Academia.Programador.Bk.Gestao.Imobiliaria.DAO;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Configurations;
 using Academia.Programador.Bk.Gestao.Imobiliaria.DAO.Repositorios.EF;
 using Academia.Programador.Bk.Gestao.Imobiliaria.Dominio;
+using Academia.Programador.Bk.Gestao.Imobiliaria.Web.Views;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -18,6 +19,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Adicionar serviços de criação do HttpClient 
+            builder.Services.AddHttpClient();
 
             // Adicionando o contexto e configurando para usar o SQL Server
             builder.Services.AddDbContext<ImobiliariaDbContext>((serviceProvider, options) =>
@@ -25,6 +28,7 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
                 var connectionStrings = serviceProvider.GetRequiredService<IOptions<ConnectionStrings>>().Value;
                 options.UseSqlServer(connectionStrings.Master);
             });
+
 
             builder.Services.Configure<ConnectionStrings>(
                 builder.Configuration.GetSection("ConnectionStrings"));
@@ -39,6 +43,8 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
             // Registro do BackgroundService
             builder.Services.AddHostedService<ServicoTrasDosPanos>();
 
+            builder.Services.AddTransient<ClienteApiService>();
+
             //Autenticação
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -49,6 +55,9 @@ namespace Academia.Programador.Bk.Gestao.Imobiliaria.Web
                     options.LoginPath = "/Convidado/Index"; // Defenir página de login
                     options.LogoutPath = "/Login/Logout"; // Defenir página logout
                 });
+
+            //Metodo para indicar que irá rodar como serviço windows.
+            //builder.Host.UseWindowsService();
 
             var app = builder.Build();
 

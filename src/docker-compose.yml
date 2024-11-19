@@ -17,3 +17,17 @@ services:
      ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
+
+  academia.programador.bk.gestao.imobiliaria.api:
+    image: ${DOCKER_REGISTRY-}academiaprogramadorbkgestaoimobiliariaapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5122
+    ports:
+      - "5122"
+    build:
+      context: .
+      dockerfile: Academia.Programador.Bk.Gestao.Imobiliaria.Api/Dockerfile
+    depends_on:
+      - sqlserver.academia
+

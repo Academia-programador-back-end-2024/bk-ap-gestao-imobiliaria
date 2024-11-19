@@ -4,7 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "academia.programador.bk.gestao.imobiliaria.web": "StartDebugging"
+        "academia.programador.bk.gestao.imobiliaria.web": "StartDebugging",
+        "academia.programador.bk.gestao.imobiliaria.api": "StartDebugging"
       }
     }
   }

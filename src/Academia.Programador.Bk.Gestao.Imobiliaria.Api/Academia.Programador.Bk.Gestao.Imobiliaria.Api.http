@@ -1,0 +1,6 @@
+@Academia.Programador.Bk.Gestao.Imobiliaria.Api_HostAddress = http://localhost:5246
+
+GET {{Academia.Programador.Bk.Gestao.Imobiliaria.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
